@@ -59,9 +59,17 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
 
                 @Override
                 public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Index sended! " + scanContent.substring(4) , Toast.LENGTH_SHORT);
-                    toast.show();
+
+                    if(response.isSuccessful()) {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Index found and changed! " + scanContent.substring(4), Toast.LENGTH_SHORT);
+                        toast.show();
+                    }else{
+
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Not found" + scanContent.substring(4), Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                 }
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {

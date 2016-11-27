@@ -71,7 +71,7 @@ public class API {
 
         @FormUrlEncoded
         @POST("/confirm")
-        Call<String> sendIndexNumber(@Field(":student_id") String indexNumber);
+        Call<String> sendIndexNumber(@Field("student_id") String indexNumber);
 
     }
 }

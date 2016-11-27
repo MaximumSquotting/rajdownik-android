@@ -31,7 +31,7 @@ import retrofit2.http.Path;
 public class API {
 
     private static APIInterface apiInterface;
-    private static String url = "http://frelia.org:3002/api/v1/offers/";
+    private static String url = "http://192.168.1.24:3000/";
     public static String uid = "";
     public static String token = "";
     public static String client = "";
@@ -69,8 +69,9 @@ public class API {
 
     public interface APIInterface {
 
-        @POST("/api/v1/offers/")
-        Call<String> sendIndexNumber(@Body String indexNumber);
+        @FormUrlEncoded
+        @POST("/confirm")
+        Call<String> sendIndexNumber(@Field(":student_id") String indexNumber);
 
     }
 }

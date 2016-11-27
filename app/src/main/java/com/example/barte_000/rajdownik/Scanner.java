@@ -20,7 +20,7 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
     private Button scanBtn;
     private TextView formatTxt, contentTxt;
     private API.APIInterface apiInterface;
-
+    private String scanFormat, scanContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,19 +48,19 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
 
-            String scanContent = scanningResult.getContents();
-            String scanFormat = scanningResult.getFormatName();
+            scanContent = scanningResult.getContents();
+            scanFormat = scanningResult.getFormatName();
 
             formatTxt.setText("FORMAT: " + scanFormat);
             contentTxt.setText("CONTENT: " + scanContent);
 
-            Call<String> call = apiInterface.sendIndexNumber(scanContent);
+            Call<String> call = apiInterface.sendIndexNumber(scanContent.substring(4));
             call.enqueue(new Callback<String>() {
 
                 @Override
                 public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                     Toast toast = Toast.makeText(getApplicationContext(),
-                            "Index sended!", Toast.LENGTH_SHORT);
+                            "Index sended! " + scanContent.substring(4) , Toast.LENGTH_SHORT);
                     toast.show();
                 }
                 @Override

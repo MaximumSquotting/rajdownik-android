@@ -10,24 +10,48 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.barte_000.rajdownik.Scanner">
 
-    <Button android:id="@+id/scan_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/scan" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/scan_format"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textIsSelectable="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/scan_button" />
-    <TextView
-        android:id="@+id/scan_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textIsSelectable="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/scan_format" />
+        <Button android:id="@+id/scan_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/scan" />
+
+        <TextView
+            android:id="@+id/scan_format"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/scan_button" />
+
+        <TextView
+            android:id="@+id/scan_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/scan_format" />
+
+        <TextView
+            android:id="@+id/registrationSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/scan_format" />
+
+        <TextView
+            android:id="@+id/registrationName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/scan_button" />
+    </LinearLayout>
+
 </RelativeLayout>

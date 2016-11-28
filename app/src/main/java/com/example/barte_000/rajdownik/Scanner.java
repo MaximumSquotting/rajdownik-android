@@ -18,9 +18,9 @@ import retrofit2.Callback;
 public class Scanner extends AppCompatActivity implements OnClickListener{
 
     private Button scanBtn;
-    private TextView formatTxt, contentTxt;
+    private TextView formatTxt, contentTxt, registrationName, registrationSurname;
     private API.APIInterface apiInterface;
-    private String scanFormat, scanContent;
+    private String scanFormat,scanContent ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,8 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
         scanBtn = (Button)findViewById(R.id.scan_button);
         formatTxt = (TextView)findViewById(R.id.scan_format);
         contentTxt = (TextView)findViewById(R.id.scan_content);
+        registrationName = (TextView)findViewById(R.id.registrationName);
+        registrationSurname = (TextView)findViewById(R.id.registrationSurname);
 
         scanBtn.setOnClickListener(this);
     }
@@ -54,16 +56,20 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
             formatTxt.setText("FORMAT: " + scanFormat);
             contentTxt.setText("CONTENT: " + scanContent);
 
-            Call<String> call = apiInterface.sendIndexNumber(scanContent.substring(4));
-            call.enqueue(new Callback<String>() {
+            Call<Registrations> call = apiInterface.sendIndexNumber(scanContent.substring(4));
+            call.enqueue(new Callback<Registrations>() {
 
                 @Override
-                public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                public void onResponse(Call<Registrations> call, retrofit2.Response<Registrations> response) {
 
                     if(response.isSuccessful()) {
                         Toast toast = Toast.makeText(getApplicationContext(),
                                 "Index found and changed! " + scanContent.substring(4), Toast.LENGTH_SHORT);
                         toast.show();
+
+                        Registrations acceptedRegistration = response.body();
+                        registrationName.setText(acceptedRegistration.getName());
+
                     }else{
 
                         Toast toast = Toast.makeText(getApplicationContext(),
@@ -72,7 +78,7 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
                     }
                 }
                 @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                public void onFailure(Call<Registrations> call, Throwable t) {
                     Toast toast = Toast.makeText(getApplicationContext(),
                             "Host not responding!", Toast.LENGTH_SHORT);
                     toast.show();

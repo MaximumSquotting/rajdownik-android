@@ -44,7 +44,7 @@ public class API {
                                 @Override
                                 public Response intercept(Chain chain) throws IOException {
                                     Request request = chain.request().newBuilder()
-                                            .addHeader("Accept", "Application/JSON")
+                                            .addHeader("Accept", "application/json")
                                             .addHeader("uid", uid)
                                             .addHeader("client", client)
                                             .addHeader("access-token",token).build();
@@ -71,7 +71,7 @@ public class API {
 
         @FormUrlEncoded
         @POST("/confirm")
-        Call<String> sendIndexNumber(@Field("student_id") String indexNumber);
+        Call<Registrations> sendIndexNumber(@Field("student_id") String indexNumber);
 
     }
 }

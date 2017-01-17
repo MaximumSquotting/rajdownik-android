@@ -1,5 +1,13 @@
 package com.example.barte_000.rajdownik;
 
+import android.content.Context;
+import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.Activity;
@@ -10,13 +18,22 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.zxing.client.android.AmbientLightManager;
+import com.google.zxing.client.android.camera.CameraConfigurationUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.*;
+import com.journeyapps.barcodescanner.CameraPreview;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import retrofit2.Call;
 import retrofit2.Callback;
+
 
 public class Scanner extends AppCompatActivity implements OnClickListener{
 
@@ -31,9 +48,10 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
     @BindView(R.id.acceptedTerms)       CheckBox acceptedTerms;
 
 
-
+    private AmbientLightManager alm;
     private API.APIInterface apiInterface;
     private String scanFormat,scanContent ;
+    private ZXingScannerView mScannerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +63,13 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
         scanBtn.setOnClickListener(this);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void onClick(View v){
         //respond to clicks
         if(v.getId()==R.id.scan_button){
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
+
         }
     }
 
@@ -86,9 +106,19 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
                         signedDeclaration.setChecked(acceptedRegistration.isSigned_declaration());
                         signedDeclaration.setVisibility(View.VISIBLE);
                     }else{
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                "Not found" + scanContent.substring(4), Toast.LENGTH_SHORT);
-                        toast.show();
+                        if(response.code() == 409){
+                            Toast toast = Toast.makeText(getApplicationContext(),
+                                    "Too much persons" + scanContent.substring(4), Toast.LENGTH_SHORT);
+                            toast.show();
+
+                            // send the tone to the "alarm" stream (classic beeps go there) with 50% volume
+                            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 200);
+                            toneG.startTone(ToneGenerator.TONE_DTMF_0, 3000); // 200 is duration in ms
+                        }else {
+                            Toast toast = Toast.makeText(getApplicationContext(),
+                                    "Not found" + scanContent.substring(4), Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
                     }
                 }
                 @Override

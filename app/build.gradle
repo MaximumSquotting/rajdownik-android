@@ -29,6 +29,8 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:24.+'
     compile 'com.journeyapps:zxing-android-embedded:3.4.0'
+    compile 'me.dm7.barcodescanner:zbar:1.8.2'
+    compile 'me.dm7.barcodescanner:zxing:1.9'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'

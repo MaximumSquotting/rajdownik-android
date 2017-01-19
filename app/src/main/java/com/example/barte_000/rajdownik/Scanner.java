@@ -1,17 +1,12 @@
 package com.example.barte_000.rajdownik;
 
-import android.content.Context;
-import android.hardware.Camera;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraManager;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.app.Activity;
-import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,13 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.client.android.AmbientLightManager;
-import com.google.zxing.client.android.camera.CameraConfigurationUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.google.zxing.*;
-import com.journeyapps.barcodescanner.CameraPreview;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +28,7 @@ import retrofit2.Callback;
 public class Scanner extends AppCompatActivity implements OnClickListener{
 
     @BindView(R.id.scan_button)         Button scanBtn;
+    @BindView(R.id.scan_button2)        Button scanBtn2;
     @BindView(R.id.registrationName)    TextView registrationName;
     @BindView(R.id.registrationSurname) TextView registrationSurname;
     @BindView(R.id.registrationIndex)   TextView registrationStudentId;
@@ -52,6 +43,8 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
     private API.APIInterface apiInterface;
     private String scanFormat,scanContent ;
     private ZXingScannerView mScannerView;
+    private IntentIntegrator scanIntegrator;
+    private boolean contScan = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +54,21 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
 
         apiInterface = API.getClient();
         scanBtn.setOnClickListener(this);
+        scanBtn2.setOnClickListener(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void onClick(View v){
         //respond to clicks
         if(v.getId()==R.id.scan_button){
-            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+            scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
-
+            contScan = false;
+        }
+        if(v.getId() == R.id.scan_button2){
+            scanIntegrator = new IntentIntegrator(this);
+            scanIntegrator.initiateScan();
+            contScan = true;
         }
     }
 
@@ -101,23 +100,29 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
 
                         registrationAccepted.setChecked(acceptedRegistration.isAccepted());
                         registrationAccepted.setVisibility(View.VISIBLE);
+                        registrationAccepted.setClickable(false);
                         acceptedTerms.setChecked(acceptedRegistration.isAccepted_terms());
                         acceptedTerms.setVisibility(View.VISIBLE);
+                        acceptedTerms.setClickable(false);
                         signedDeclaration.setChecked(acceptedRegistration.isSigned_declaration());
                         signedDeclaration.setVisibility(View.VISIBLE);
+                        signedDeclaration.setClickable(false);
                     }else{
                         if(response.code() == 409){
                             Toast toast = Toast.makeText(getApplicationContext(),
-                                    "Too much persons" + scanContent.substring(4), Toast.LENGTH_SHORT);
+                                    "Too many people: " + scanContent.substring(4), Toast.LENGTH_SHORT);
                             toast.show();
 
                             // send the tone to the "alarm" stream (classic beeps go there) with 50% volume
-                            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 200);
-                            toneG.startTone(ToneGenerator.TONE_DTMF_0, 3000); // 200 is duration in ms
+                            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 200);
+                            toneG.startTone(ToneGenerator.TONE_DTMF_S, 1000); // 200 is duration in ms
                         }else {
                             Toast toast = Toast.makeText(getApplicationContext(),
                                     "Not found" + scanContent.substring(4), Toast.LENGTH_SHORT);
                             toast.show();
+
+                            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 1000);
+                            toneG.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP, 3000); // 200 is duration in ms
                         }
                     }
                 }
@@ -134,6 +139,7 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
                     "No scan data received!", Toast.LENGTH_SHORT);
             toast.show();
         }
-
+        if(contScan)
+            scanIntegrator.initiateScan();
     }
 }

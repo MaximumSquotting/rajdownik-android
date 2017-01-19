@@ -3,4 +3,5 @@
     <string name="scan">"Scan"</string>
     <string name="found">"Founded"</string>
     <string name="notFound">"Cannot found"</string>
+    <string name="scan_continuously">scan_continuously</string>
 </resources>

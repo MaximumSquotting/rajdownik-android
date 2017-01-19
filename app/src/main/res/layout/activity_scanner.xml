@@ -18,6 +18,7 @@
         android:layout_centerHorizontal="true"
         android:text="@string/scan" />
 
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -30,6 +31,11 @@
             android:layout_width="match_parent"
             android:layout_height="344dp">
 
+            <Button android:id="@+id/scan_button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/scan_continuously" />
             <TextView
                 android:id="@+id/registrationName"
                 android:layout_width="match_parent"

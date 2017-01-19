@@ -18,6 +18,8 @@ import com.google.zxing.client.android.AmbientLightManager;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -37,6 +39,7 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
     @BindView(R.id.accepted)            CheckBox registrationAccepted;
     @BindView(R.id.signedDeclaration)   CheckBox signedDeclaration;
     @BindView(R.id.acceptedTerms)       CheckBox acceptedTerms;
+    @BindView(R.id.femaleShirt)         CheckBox femaleShirt;
 
 
     private AmbientLightManager alm;
@@ -113,6 +116,11 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
                         signedDeclaration.setChecked(acceptedRegistration.isSigned_declaration());
                         signedDeclaration.setVisibility(View.VISIBLE);
                         signedDeclaration.setClickable(false);
+                        femaleShirt.setChecked(acceptedRegistration.isFemale_shirt());
+                        femaleShirt.setVisibility(View.VISIBLE);
+                        femaleShirt.setClickable(false);
+
+
                     }else{
                         if(response.code() == 409){
                             Toast toast = Toast.makeText(getApplicationContext(),

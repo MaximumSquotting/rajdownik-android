@@ -57,6 +57,12 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
         scanBtn2.setOnClickListener(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        super.onBackPressed();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void onClick(View v){
         //respond to clicks
@@ -75,7 +81,7 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         //retrieve scan result
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanningResult != null) {
+        if (scanningResult != null && resultCode==RESULT_OK) {
 
             scanContent = scanningResult.getContents();
             scanFormat = scanningResult.getFormatName();
@@ -139,7 +145,8 @@ public class Scanner extends AppCompatActivity implements OnClickListener{
                     "No scan data received!", Toast.LENGTH_SHORT);
             toast.show();
         }
-        if(contScan)
+        if(contScan && resultCode==RESULT_OK)
             scanIntegrator.initiateScan();
+
     }
 }
